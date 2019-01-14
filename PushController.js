@@ -4,11 +4,13 @@ import PushNotification from 'react-native-push-notification';
 
 export default class PushController extends Component {
   componentDidMount() {
+    const int = this;
     PushNotification.configure({
 
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function(token) {
         console.log( 'TOKEN:', token );
+        int.props.setToken(token.token);
     },
 
     // (required) Called when a remote or local notification is opened or received

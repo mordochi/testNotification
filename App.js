@@ -26,13 +26,16 @@ export default class App extends Component<Props> {
 
     this.state = {
       notification: true,
+      token: 'n / a'
     }
 
     this.switchNotification = this.switchNotification.bind(this);
     this.handleAppStateChange = this.handleAppStateChange.bind(this);
+    this.setToken = this.setToken.bind(this);
   }
 
   componentDidMount() {
+    console.log('wefwfw');
     AppState.addEventListener('change', this.handleAppStateChange);
   }
 
@@ -41,7 +44,7 @@ export default class App extends Component<Props> {
   }
 
   handleAppStateChange(appState) {
-    if(appState === 'inactive') {
+    if(appState === 'inactive' && this.state.notification) {
       console.log(appState)
       PushNotification.localNotificationSchedule({
         //... You can use all the options from localNotifications
@@ -49,6 +52,12 @@ export default class App extends Component<Props> {
         date: new Date(Date.now() + (1 * 1000)) // in 60 secs
       });
     }
+  }
+
+  setToken(token) {
+    this.setState({
+      token: token
+    });
   }
 
   switchNotification() {
@@ -63,8 +72,9 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+        <Text>token:{this.state.token}</Text>
         <Switch value={this.state.notification} onValueChange={() => this.switchNotification()} />
-        <PushController />
+        <PushController setToken={(token) => this.setToken(token)} />
       </View>
     );
   }
